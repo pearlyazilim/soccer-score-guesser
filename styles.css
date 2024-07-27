@@ -1,16 +1,146 @@
-// script.js
-document.getElementById('generate-button').addEventListener('click', function() {
-    // Rastgele bir sayı oluştur
-    const min = 0;
-    const max = 5;
-    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    
-    // Rastgele oran hesapla (20-50 arası)
-    const minPercentage = 40;
-    const maxPercentage = 90;
-    const randomPercentage = Math.floor(Math.random() * (maxPercentage - minPercentage + 1)) + minPercentage;
-    
-    // Ekrana yazdır
-    document.getElementById('number-display').textContent = `Gol: ${randomNumber}`;
-    document.getElementById('percentage-display').textContent = `Oran: %${randomPercentage}`;
-});
+/* styles.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: grey;
+}
+
+.long-rectangle {
+    position: relative;
+    width: 500px; /* Uzun dikdörtgenin genişliği */
+    height: 300px; /* Uzun dikdörtgenin yüksekliği */
+    background-color: #4D4D4D; /* Kapalı gri rengi */
+    padding: 20px; /* İçeriklerin kenardan uzaklığı */
+    box-sizing: border-box; /* Padding'i toplam genişliğe dahil eder */
+    display: flex;
+    flex-direction: column; /* İçerikleri dikey olarak düzenler */
+    align-items: center; /* İçerikleri ortalar */
+    justify-content: center; /* İçerikler arasında boşluk bırakır */
+    position: relative; /* Yüksekliği ayarlamak için */
+    overflow: hidden; /* İçeriklerin taşmasını engeller */
+}
+
+.rainbow-strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px; /* Çubuğun yüksekliği */
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 600% 100%; /* Arka plan boyutunu büyütür */
+    animation: rainbow 5s linear infinite; /* Animasyon ayarları */
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+.centered-text {
+    font-size: 16px; /* Yazı boyutunu artırdım */
+    font-family: 'Arial', sans-serif; /* Font ailesi */
+    color: white; /* Yazının rengi */
+    text-align: left; /* Yazıyı sola hizalar */
+}
+
+.selection-panel-wrapper {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 60px); /* Butonun yüksekliği kadar boşluk bırak */
+    overflow: hidden; /* İçerikleri gizler */
+}
+
+.selection-panel {
+    display: flex;
+    flex-direction: column; /* Seçim kutularını dikey olarak hizalar */
+    gap: 10px; /* Seçim kutuları arasında boşluk bırakır */
+    color: white; /* Seçim metinlerinin rengi */
+    height: calc(100% - 40px); /* Yüksekliği ayarladım */
+    width: 100%; /* Genişliği ayarladım */
+    overflow-y: auto; /* Dikey kaydırma */
+    overflow-x: hidden; /* Yatay kaydırmayı gizler */
+    padding: 0; /* Boşlukları kaldırdım */
+    margin: 0; /* Boşlukları kaldırdım */
+    background: #333; /* Arka plan rengi */
+}
+
+.selection-panel label {
+    font-size: 14px; /* Seçim metinlerinin boyutu */
+    font-family: 'Arial', sans-serif; /* Buton yazısının fontu */
+    display: flex;
+    align-items: center; /* Checkbox ve metni ortalar */
+    overflow: hidden; /* Taşmayı gizler */
+}
+
+.selection-panel input[type="checkbox"] {
+    margin: 0; /* Margin'i sıfırlar */
+    accent-color: #ffffff; /* Checkbox rengi */
+    width: 20px; /* Checkbox genişliği */
+    height: 20px; /* Checkbox yüksekliği */
+    cursor: pointer; /* Üzerine gelindiğinde el işareti */
+    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s; /* Geçiş animasyonu */
+}
+
+.selection-panel input[type="checkbox"]:hover {
+    transform: scale(1.15); /* Hover animasyonu */
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7); /* Hover gölge efekti */
+}
+
+.selection-panel input[type="checkbox"]:checked {
+    transform: scale(1.3) rotate(15deg); /* Checked animasyonu */
+    background-color: #888; /* Checked arka plan rengi */
+}
+
+/* Sayı ve oran kısmının konumunu ayarla */
+#number-display {
+    text-align: left; /* Soldan hizala */
+    color: white;
+    font-family: 'Arial', sans-serif;
+    position: absolute; /* Mutlak konumlandırma */
+    top: 20px; /* Üstten boşluk bırakır */
+    left: 20px; /* Soldan boşluk bırakır */
+    margin: 0; /* Margin'i sıfırlar */
+}
+
+#percentage-display {
+    text-align: right; /* Sağ hizala */
+    color: white;
+    font-family: 'Arial', sans-serif;
+    position: absolute; /* Mutlak konumlandırma */
+    top: 20px; /* Üstten boşluk bırakır */
+    right: 20px; /* Sağdan boşluk bırakır */
+    margin: 0; /* Margin'i sıfırlar */
+}
+
+/* Buton stil ayarları */
+#generate-button {
+    background-color: #555555;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px; /* Üstten boşluk bırakır */
+    position: absolute; /* Konumu ayarlamak için */
+    bottom: 20px; /* Alt boşluk bırakır */
+    left: 50%; /* Sol kenarı ortalar */
+    transform: translateX(-50%); /* Yatayda merkezler */
+}
+
+#generate-button:hover {
+    background-color: #666666;
+}
